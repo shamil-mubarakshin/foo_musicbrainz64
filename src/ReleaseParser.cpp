@@ -43,12 +43,12 @@ Release ReleaseParser::parse()
 	return m_release;
 }
 
-std::string ReleaseParser::to_str(json j)
+std::string ReleaseParser::to_str(json& obj)
 {
-	if (j.is_null()) return "";
-	if (!j.is_string()) return j.dump();
+	if (obj.is_null()) return "";
+	if (!obj.is_string()) return obj.dump();
 
-	pfc::string8 str = j.get<std::string>();
+	pfc::string8 str = obj.get<std::string>();
 	if (prefs::bools::ascii_punctuation)
 	{
 		for (const auto& [what, with] : ascii_replacements)
@@ -59,7 +59,7 @@ std::string ReleaseParser::to_str(json j)
 	return str.get_ptr();
 }
 
-void ReleaseParser::filter_releases(json releases, size_t count, Strings& out)
+void ReleaseParser::filter_releases(json& releases, size_t count, Strings& out)
 {
 	if (!releases.is_array()) return;
 
@@ -91,9 +91,9 @@ void ReleaseParser::filter_releases(json releases, size_t count, Strings& out)
 	}
 }
 
-void ReleaseParser::get_artist_info(json j, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids)
+void ReleaseParser::parse_artist_credits(json& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids)
 {
-	auto& artist_credits = j["artist-credit"];
+	auto& artist_credits = obj["artist-credit"];
 	if (!artist_credits.is_array()) return;
 
 	for (auto&& artist_credit : artist_credits)
@@ -182,7 +182,7 @@ void ReleaseParser::parse_relations(json& obj, Strings& composers, Performers& p
 void ReleaseParser::parse_release_info()
 {
 	Strings dummy;
-	get_artist_info(m_obj, m_release.album_artist, m_release.album_artist_sort, dummy, m_release.albumartistids);
+	parse_artist_credits(m_obj, m_release.album_artist, m_release.album_artist_sort, dummy, m_release.albumartistids);
 
 	m_release.albumid = to_str(m_obj["id"]);
 	m_release.status = to_str(m_obj["status"]);
@@ -203,7 +203,7 @@ void ReleaseParser::parse_release_info()
 					auto& codes = area["iso-3166-1-codes"];
 					if (codes.is_array())
 					{
-						const auto it = std::ranges::find_if(codes, [](const auto& code) { return to_str(code) == "GB"; });
+						const auto it = std::ranges::find_if(codes, [](auto&& code) { return to_str(code) == "GB"; });
 						if (it != codes.end())
 						{
 							m_release.country = "GB";
@@ -268,7 +268,7 @@ void ReleaseParser::parse_tracks()
 			{
 				auto& discs = media["discs"];
 				if (!discs.is_array()) continue;
-				const auto it = std::ranges::find_if(discs, [=](const auto& disc) { return m_release.discid == to_str(disc["id"]); });
+				const auto it = std::ranges::find_if(discs, [=](auto&& disc) { return m_release.discid == to_str(disc["id"]); });
 				if (it == discs.end()) continue;
 			}
 
@@ -282,7 +282,7 @@ void ReleaseParser::parse_tracks()
 			for (auto&& track : tracks)
 			{
 				Track t;
-				get_artist_info(track, t.artist, t.artist_sort, t.artists, t.artistids);
+				parse_artist_credits(track, t.artist, t.artist_sort, t.artists, t.artistids);
 				parse_relations(m_obj, t.composers, t.performers);
 				t.discnumber = discnumber;
 				t.media = format;

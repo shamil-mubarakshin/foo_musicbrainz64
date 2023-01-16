@@ -5,13 +5,14 @@ class ReleaseParser
 public:
 	ReleaseParser(json obj, size_t handle_count, json discid = json());
 
-	static std::string to_str(json j);
-	static void filter_releases(json releases, size_t count, Strings& out);
-	static void get_artist_info(json j, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids);
+	static void filter_releases(json& releases, size_t count, Strings& out);
 
 	Release parse();
 
 private:
+	static std::string to_str(json& obj);
+
+	void parse_artist_credits(json& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids);
 	void parse_label_and_barcode();
 	void parse_relations(json& obj, Strings& composers, Performers& performers);
 	void parse_release_info();
