@@ -143,14 +143,7 @@ void TagWriter::write()
 
 		if (prefs::bools::write_performer)
 		{
-			Strings tmp;
-			for (const auto& [performer, what] : track.performers)
-			{
-				const std::string str = fmt::format("{} ({})", performer, fmt::join(what, ", "));
-				tmp.emplace_back(str);
-			}
-
-			set_values(info, "PERFORMER", tmp);
+			set_values(info, "PERFORMER", track.performers);
 		}
 
 		if (prefs::bools::write_composer)

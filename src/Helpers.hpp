@@ -1,14 +1,18 @@
 #pragma once
 
+using namespace std::literals::string_view_literals;
+
+using Strings = std::vector<std::string>;
+using StringSet = std::set<std::string>;
 using Performers = std::map<std::string, StringSet>;
 
 struct Track
 {
-	Performers performers;
 	Strings artists;
 	Strings artistids;
 	Strings composers;
 	Strings isrcs;
+	Strings performers;
 	size_t discnumber{};
 	size_t tracknumber{};
 	size_t totaltracks{};
@@ -49,25 +53,25 @@ struct Release
 
 using Releases = std::vector<Release>;
 
-static constexpr std::array<wil::zstring_view, 6> primary_types =
+static constexpr std::array primary_types =
 {
-	"(None)",
-	"Album",
-	"Single",
-	"EP",
-	"Broadcast",
-	"Other",
+	"(None)"sv,
+	"Album"sv,
+	"Single"sv,
+	"EP"sv,
+	"Broadcast"sv,
+	"Other"sv,
 };
 
-static constexpr std::array<wil::zstring_view, 7> release_statuses =
+static constexpr std::array release_statuses =
 {
-	"(None)",
-	"Official",
-	"Promotion",
-	"Bootleg",
-	"Pseudo-Release",
-	"Withdrawn",
-	"Cancelled",
+	"(None)"sv,
+	"Official"sv,
+	"Promotion"sv,
+	"Bootleg"sv,
+	"Pseudo-Release"sv,
+	"Withdrawn"sv,
+	"Cancelled"sv,
 };
 
 static Strings split_string(std::string_view text, std::string_view delims)

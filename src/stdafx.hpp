@@ -24,8 +24,6 @@ using json = nlohmann::json;
 #include <libPPUI/CListControlSimple.h>
 #include <libPPUI/Controls.h>
 #include <pfc/string-conv-lite.h>
-using Strings = std::vector<std::string>;
-using StringSet = std::set<std::string>;
 
 #include <wil/stl.h>
 

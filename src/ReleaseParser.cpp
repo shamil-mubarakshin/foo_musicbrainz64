@@ -121,7 +121,7 @@ void ReleaseParser::parse_label_and_barcode()
 	auto& label_infos = m_obj["label-info"];
 	if (label_infos.is_array() && label_infos.size() > 0)
 	{
-		std::set<std::string> labels, catalogs;
+		StringSet labels, catalogs;
 
 		for (auto&& label_info : label_infos)
 		{
@@ -255,7 +255,7 @@ void ReleaseParser::parse_tracks()
 	auto& medias = m_obj["media"];
 	if (!medias.is_array()) return;
 
-	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [this](size_t t, json j) { return t + j["tracks"].size(); });
+	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [](size_t t, json j) { return t + j["tracks"].size(); });
 	const bool complete = release_totaltracks == m_handle_count;
 	m_release.totaldiscs = medias.size();
 
@@ -281,9 +281,12 @@ void ReleaseParser::parse_tracks()
 
 			for (auto&& track : tracks)
 			{
+				Performers performers;
 				Track t;
 				parse_artist_credits(track, t.artist, t.artist_sort, t.artists, t.artistids);
-				parse_relations(m_obj, t.composers, t.performers);
+				parse_relations(m_obj, t.composers, performers);
+				if (m_release.album_artist != t.artist) m_release.is_various = true;
+
 				t.discnumber = discnumber;
 				t.media = format;
 				t.subtitle = subtitle;
@@ -304,10 +307,15 @@ void ReleaseParser::parse_tracks()
 						t.isrcs = std::ranges::to<Strings>(view);
 					}
 
-					parse_relations(recording, t.composers, t.performers);
+					parse_relations(recording, t.composers, performers);
 				}
 
-				if (m_release.album_artist != t.artist) m_release.is_various = true;
+				for (const auto& [performer, what] : performers)
+				{
+					const std::string str = fmt::format("{} ({})", performer, fmt::join(what, ", "));
+					t.performers.emplace_back(str);
+				}
+
 				m_release.tracks.emplace_back(t);
 			}
 		}

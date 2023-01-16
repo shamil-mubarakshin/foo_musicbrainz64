@@ -116,7 +116,7 @@ pfc::string8 CDialogTagger::listGetSubItemText(ctx_t, size_t row, size_t column)
 
 std::string CDialogTagger::FilterMediaTypes(const Tracks& tracks)
 {
-	std::set<std::string> set;
+	StringSet set;
 	Strings ffs;
 	for (auto&& track : tracks)
 	{
