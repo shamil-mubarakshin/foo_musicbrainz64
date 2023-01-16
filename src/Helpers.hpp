@@ -1,6 +1,6 @@
 #pragma once
 
-using Performers = std::map<std::string, Strings>;
+using Performers = std::map<std::string, StringSet>;
 
 struct Track
 {

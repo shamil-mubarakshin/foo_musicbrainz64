@@ -5,6 +5,7 @@
 #include <map>
 #include <ranges>
 #include <regex>
+#include <set>
 #include <string>
 
 #define FMT_HEADER_ONLY
@@ -24,6 +25,7 @@ using json = nlohmann::json;
 #include <libPPUI/Controls.h>
 #include <pfc/string-conv-lite.h>
 using Strings = std::vector<std::string>;
+using StringSet = std::set<std::string>;
 
 #include <wil/stl.h>
 

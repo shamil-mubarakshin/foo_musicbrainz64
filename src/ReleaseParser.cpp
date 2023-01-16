@@ -166,11 +166,11 @@ void ReleaseParser::parse_relations(json& obj, Strings& composers, Performers& p
 						const auto it = performers.find(artist);
 						if (it == performers.end())
 						{
-							performers[artist] = std::ranges::to<Strings>(view);
+							performers[artist] = std::ranges::to<StringSet>(view);
 						}
 						else
 						{
-							std::ranges::copy(view, std::back_inserter(it->second));
+							std::ranges::copy(view, std::inserter(it->second, it->second.end()));
 						}
 					}
 				}
