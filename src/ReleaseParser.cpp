@@ -39,7 +39,6 @@ Release ReleaseParser::parse()
 	parse_release_info(); // must be first before parse_tracks
 	parse_tracks();
 	parse_label_and_barcode();
-	parse_relations();
 	parse_rg_and_date();
 	return m_release;
 }
@@ -140,13 +139,11 @@ void ReleaseParser::parse_label_and_barcode()
 	}
 }
 
-void ReleaseParser::parse_relations()
+void ReleaseParser::parse_relations(json& obj, Strings& composers, Performers& performers)
 {
-	auto& relations = m_obj["relations"];
+	auto& relations = obj["relations"];
 	if (relations.is_array())
 	{
-		std::map<std::string, Strings> performer_map;
-
 		for (auto&& relation : relations)
 		{
 			auto& artist_obj = relation["artist"];
@@ -157,7 +154,7 @@ void ReleaseParser::parse_relations()
 
 				if (type == "composer")
 				{
-					m_release.composers.emplace_back(artist);
+					composers.emplace_back(artist);
 				}
 				else if (type == "instrument" || type == "vocal")
 				{
@@ -166,10 +163,10 @@ void ReleaseParser::parse_relations()
 					{
 						auto view = attributes | std::views::transform([](auto&& attribute) { return to_str(attribute); });
 
-						const auto it = performer_map.find(artist);
-						if (it == performer_map.end())
+						const auto it = performers.find(artist);
+						if (it == performers.end())
 						{
-							performer_map[artist] = std::ranges::to<Strings>(view);
+							performers[artist] = std::ranges::to<Strings>(view);
 						}
 						else
 						{
@@ -178,12 +175,6 @@ void ReleaseParser::parse_relations()
 					}
 				}
 			}
-		}
-
-		for (const auto& [performer, what] : performer_map)
-		{
-			const std::string str = fmt::format("{} ({})", performer, fmt::join(what, s_sep));
-			m_release.performers.emplace_back(str);
 		}
 	}
 }
@@ -292,6 +283,7 @@ void ReleaseParser::parse_tracks()
 			{
 				Track t;
 				get_artist_info(track, t.artist, t.artist_sort, t.artists, t.artistids);
+				parse_relations(m_obj, t.composers, t.performers);
 				t.discnumber = discnumber;
 				t.media = format;
 				t.subtitle = subtitle;
@@ -311,6 +303,8 @@ void ReleaseParser::parse_tracks()
 						auto view = isrcs | std::views::transform([](auto&& isrc) { return to_str(isrc); });
 						t.isrcs = std::ranges::to<Strings>(view);
 					}
+
+					parse_relations(recording, t.composers, t.performers);
 				}
 
 				if (m_release.album_artist != t.artist) m_release.is_various = true;

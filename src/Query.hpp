@@ -9,7 +9,7 @@ public:
 	void add_param(wil::zstring_view param, wil::zstring_view value);
 
 	static constexpr wil::zstring_view s_inc_discid = "artists+labels+recordings+release-groups+artist-credits+isrcs";
-	static constexpr wil::zstring_view s_inc_release = "artists+labels+recordings+release-groups+artist-credits+isrcs+artist-rels+release-rels+recording-rels+recording-level-rels";
+	static constexpr wil::zstring_view s_inc_release = "recording-level-rels+artist-credits+release-rels+aliases+release-groups+recordings+artists+labels+recording-rels+artist-rels+work-level-rels+media+isrcs+discids+work-rels";
 
 private:
 	std::string url;

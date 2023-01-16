@@ -13,7 +13,7 @@ public:
 
 private:
 	void parse_label_and_barcode();
-	void parse_relations();
+	void parse_relations(json& obj, Strings& composers, Performers& performers);
 	void parse_release_info();
 	void parse_rg_and_date();
 	void parse_tracks();

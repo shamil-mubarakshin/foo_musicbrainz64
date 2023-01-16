@@ -1,9 +1,13 @@
 #pragma once
 
+using Performers = std::map<std::string, Strings>;
+
 struct Track
 {
+	Performers performers;
 	Strings artists;
 	Strings artistids;
+	Strings composers;
 	Strings isrcs;
 	size_t discnumber{};
 	size_t tracknumber{};
@@ -22,8 +26,6 @@ using Tracks = std::vector<Track>;
 struct Release
 {
 	Strings albumartistids;
-	Strings composers;
-	Strings performers;
 	Tracks tracks;
 	bool is_various{};
 	size_t partial_lookup_matches{};
