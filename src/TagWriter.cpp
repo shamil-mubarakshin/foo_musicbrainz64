@@ -107,8 +107,11 @@ void TagWriter::write()
 
 		if (prefs::bools::write_label_info)
 		{
-			set(info, "LABEL", m_release.label);
-			set(info, "CATALOGNUMBER", m_release.catalog);
+			const Strings labels = split_string(m_release.label, ",");
+			const Strings catalogs = split_string(m_release.catalog, ",");
+
+			set_values(info, "LABEL", labels);
+			set_values(info, "CATALOGNUMBER", catalogs);
 			set(info, "BARCODE", m_release.barcode);
 		}
 
