@@ -57,7 +57,6 @@ CDialogTagger::CDialogTagger(const Releases& releases, metadb_handle_list_cref h
 BOOL CDialogTagger::OnInitDialog(CWindow, LPARAM)
 {
 	SetIcon(ui_control::get()->get_main_icon());
-	CenterWindow();
 
 	CreatePreferencesHeaderFont(m_font, *this);
 	GetDlgItem(IDC_HEADER_RELEASE).SetFont(m_font.m_hFont);
