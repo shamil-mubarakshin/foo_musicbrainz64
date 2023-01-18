@@ -19,7 +19,7 @@ private:
 	void parse_rg_and_date();
 	void parse_tracks();
 
-	static constexpr fmt::string_view s_sep = ", ";
+	static constexpr fmt::string_view s_sep = "; ";
 
 	Release m_release;
 	json m_obj;

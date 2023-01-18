@@ -91,7 +91,7 @@ void TagWriter::write()
 
 		if (prefs::bools::write_releasetype)
 		{
-			Strings types = split_string(m_release.secondary_types, ",");
+			Strings types = split_string(m_release.secondary_types, ";");
 			if (get_primary_type_index(m_release.primary_type) > 0)
 			{
 				types.insert(types.begin(), m_release.primary_type);
@@ -107,8 +107,8 @@ void TagWriter::write()
 
 		if (prefs::bools::write_label_info)
 		{
-			const Strings labels = split_string(m_release.label, ",");
-			const Strings catalogs = split_string(m_release.catalog, ",");
+			const Strings labels = split_string(m_release.label, ";");
+			const Strings catalogs = split_string(m_release.catalog, ";");
 
 			set_values(info, "LABEL", labels);
 			set_values(info, "CATALOGNUMBER", catalogs);
