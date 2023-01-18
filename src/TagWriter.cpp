@@ -64,11 +64,11 @@ void TagWriter::write()
 			set(info, "TOTALTRACKS", track.totaltracks);
 			set(info, "DATE", m_release.date);
 
+			if (track.tracknumber == 1) subtitle = track.subtitle;
+			set(info, "DISCSUBTITLE", subtitle);
+
 			if (m_release.totaldiscs > 1)
 			{
-				if (track.tracknumber == 1) subtitle = track.subtitle;
-
-				set(info, "DISCSUBTITLE", subtitle);
 				set(info, "DISCNUMBER", track.discnumber);
 				set(info, "TOTALDISCS", m_release.totaldiscs);
 			}
