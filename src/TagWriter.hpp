@@ -3,7 +3,7 @@
 class TagWriter
 {
 public:
-	TagWriter(metadb_handle_list_cref handles, const Release& release, size_t offset);
+	TagWriter(metadb_handle_list_cref handles, const Release& release);
 
 	void write();
 
@@ -15,6 +15,4 @@ private:
 
 	Release m_release;
 	metadb_handle_list m_handles;
-	size_t m_offset{};
-	std::vector<file_info_impl> m_infos;
 };

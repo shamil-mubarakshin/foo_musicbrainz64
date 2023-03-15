@@ -289,7 +289,11 @@ void CDialogTagger::OnLabelUpdate(uint32_t, int, CWindow)
 
 void CDialogTagger::OnOk(uint32_t, int, CWindow)
 {
-	TagWriter(m_handles, m_releases[m_current_release], m_current_disc * m_handle_count).write();
+	auto& release = m_releases[m_current_release];
+	auto view = release.tracks | std::views::drop(m_current_disc * m_handle_count) | std::views::take(m_handle_count);
+	release.tracks = std::ranges::to<Tracks>(view);
+	TagWriter(m_handles, release).write();
+
 	g_window_placement.read_from_window(*this);
 	DestroyWindow();
 }

@@ -1,7 +1,7 @@
 #include "stdafx.hpp"
 #include "TagWriter.hpp"
 
-TagWriter::TagWriter(metadb_handle_list_cref handles, const Release& release, size_t offset) : m_handles(handles), m_release(release), m_offset(offset) {}
+TagWriter::TagWriter(metadb_handle_list_cref handles, const Release& release) : m_handles(handles), m_release(release) {}
 
 pfc::string8 TagWriter::trim(std::string_view str)
 {
@@ -16,8 +16,13 @@ void TagWriter::set(file_info& info, std::string_view name, size_t value)
 void TagWriter::set(file_info& info, std::string_view name, std::string_view value)
 {
 	const pfc::string8 trimmed = trim(value);
-	if (trimmed.get_length()) info.meta_set(name.data(), trimmed);
-	else info.meta_remove_field(name.data());
+	if (trimmed.is_empty())
+	{
+		info.meta_remove_field(name.data());
+		return;
+	}
+
+	info.meta_set(name.data(), trimmed);
 }
 
 void TagWriter::set_values(file_info& info, std::string_view name, const Strings& values)
@@ -26,24 +31,21 @@ void TagWriter::set_values(file_info& info, std::string_view name, const Strings
 	if (values.empty()) return;
 
 	auto transform = [this](auto&& str) { return trim(str); };
-	for (auto&& value : values | std::views::transform(transform))
+	auto filter = [](auto&& str) { return str.get_length() > 0; };
+	for (auto&& value : values | std::views::transform(transform) | std::views::filter(filter))
 	{
-		if (value.get_length())
-		{
-			info.meta_add(name.data(), value);
-		}
+		info.meta_add(name.data(), value);
 	}
 }
 
 void TagWriter::write()
 {
-	const size_t count = m_handles.get_count();
 	std::string subtitle;
+	std::vector<file_info_impl> infos;
 
-	for (size_t i = 0; i < count; ++i)
+	for (auto&& [handle, track] : std::views::zip(m_handles, m_release.tracks))
 	{
-		file_info_impl info = m_handles[i]->get_info_ref()->info();
-		auto& track = m_release.tracks[i + m_offset];
+		file_info_impl info = handle->get_info_ref()->info();
 
 		if (prefs::bools::write_standard_tags)
 		{
@@ -151,12 +153,12 @@ void TagWriter::write()
 			set_values(info, "COMPOSER", track.composers);
 		}
 
-		m_infos.emplace_back(info);
+		infos.emplace_back(info);
 	}
 
 	metadb_io_v2::get()->update_info_async_simple(
 		m_handles,
-		pfc::ptr_list_const_array_t<const file_info, file_info_impl*>(m_infos.data(), m_infos.size()),
+		pfc::ptr_list_const_array_t<const file_info, file_info_impl*>(infos.data(), infos.size()),
 		core_api::get_main_window(),
 		metadb_io_v2::op_flag_delay_ui,
 		nullptr
