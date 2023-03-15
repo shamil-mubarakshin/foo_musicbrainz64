@@ -1,12 +1,15 @@
 #pragma once
+#define _ATL_MODULES
 #define _WIN32_WINNT _WIN32_WINNT_WIN7
 #define WINVER _WIN32_WINNT_WIN7
 
+#include <array>
 #include <map>
 #include <ranges>
 #include <regex>
 #include <set>
 #include <string>
+#include <vector>
 
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
