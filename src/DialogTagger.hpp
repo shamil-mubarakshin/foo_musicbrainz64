@@ -10,8 +10,8 @@ public:
 		MSG_WM_INITDIALOG(OnInitDialog)
 		COMMAND_ID_HANDLER_EX(IDOK, OnOk)
 		COMMAND_ID_HANDLER_EX(IDCANCEL, OnCancel)
-		NOTIFY_HANDLER_EX(IDC_LINK_URL, NM_CLICK, OnLink)
-		NOTIFY_HANDLER_EX(IDC_LINK_URL, NM_RETURN, OnLink)
+		NOTIFY_HANDLER_EX(IDC_LINK, NM_CLICK, OnLink)
+		NOTIFY_HANDLER_EX(IDC_LINK, NM_RETURN, OnLink)
 
 		COMMAND_HANDLER_EX(IDC_COMBO_PRIMARY_TYPE, CBN_SELENDOK, OnTypeChange)
 		COMMAND_HANDLER_EX(IDC_COMBO_STATUS, CBN_SELENDOK, OnStatusChange)
@@ -89,7 +89,7 @@ private:
 	CFont m_font;
 	CListControlSimple m_list_release;
 	CListControlOwnerData m_list_track;
-	CWindow m_link_url;
+	CWindow m_link;
 	LONG m_dpi{};
 	Releases m_releases;
 	fb2k::CCoreDarkModeHooks m_hooks;

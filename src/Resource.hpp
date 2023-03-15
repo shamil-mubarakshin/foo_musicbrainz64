@@ -66,5 +66,4 @@
 #define IDC_COMBO_STATUS                201
 #define IDC_COMBO_DISC                  202
 
-#define IDC_LINK_URL                    210
-
+#define IDC_LINK                        210

@@ -32,7 +32,7 @@ static const CDialogResizeHelper::Param resize_data[] =
 	{ IDC_EDIT_SECONDARY_TYPES, 1, 0, 1, 0 },
 	{ IDC_LABEL_STATUS, 1, 0, 1, 0 },
 	{ IDC_COMBO_STATUS, 1, 0, 1, 0 },
-	{ IDC_LINK_URL, 0, 1, 1, 1 },
+	{ IDC_LINK, 0, 1, 1, 1 },
 	{ IDOK, 1, 1, 1, 1 },
 	{ IDCANCEL, 1, 1, 1, 1 },
 };
@@ -63,7 +63,7 @@ BOOL CDialogTagger::OnInitDialog(CWindow, LPARAM)
 	GetDlgItem(IDC_HEADER_RELEASE_INFO).SetFont(m_font.m_hFont);
 	GetDlgItem(IDC_HEADER_TRACK).SetFont(m_font.m_hFont);
 	m_combo_disc = GetDlgItem(IDC_COMBO_DISC);
-	m_link_url = GetDlgItem(IDC_LINK_URL);
+	m_link = GetDlgItem(IDC_LINK);
 
 	InitTrackList();
 	InitReleaseInfo();
@@ -187,7 +187,7 @@ void CDialogTagger::InitReleaseList()
 {
 	m_list_release.CreateInDialog(*this, IDC_LIST_RELEASE);
 	m_list_release.SetSelectionModeSingle();
-	m_list_release.onSelChange = [&]()
+	m_list_release.onSelChange = [this]
 	{
 		const size_t idx = m_list_release.GetFocusItem();
 		if (idx != m_current_release && idx < m_release_count)
@@ -207,7 +207,8 @@ void CDialogTagger::InitReleaseList()
 	m_list_release.AddColumn("Discs", MulDiv(40, m_dpi, 96));
 
 	m_list_release.SetItemCount(m_release_count);
-	for (size_t i = 0; i < m_release_count; ++i)
+
+	for (const size_t i : std::views::iota(0U, m_release_count))
 	{
 		auto& release = m_releases[i];
 		m_list_release.SetItemText(i, artist_column, release.album_artist.c_str());
@@ -334,7 +335,7 @@ void CDialogTagger::UpdateRelease()
 
 	if (release.partial_lookup_matches > 0)
 	{
-		for (size_t i = 0; i < release.partial_lookup_matches; ++i)
+		for (const size_t i : std::views::iota(0U, release.partial_lookup_matches))
 		{
 			auto& track = release.tracks[i * m_handle_count];
 			const std::string tmp = fmt::format("Disc {} of {}", track.discnumber, release.totaldiscs);
@@ -371,9 +372,9 @@ void CDialogTagger::UpdateRelease()
 
 	UpdateTracks();
 
-	const std::string link = fmt::format("{}/release/{}", prefs::get_server(), release.albumid);
-	const std::string str = fmt::format("<a href=\"{}\">{}</a>", link, link);
-	set_window_text(m_link_url, str);
+	const std::string url = fmt::format("{}/release/{}", prefs::get_server(), release.albumid);
+	const std::string link_str = fmt::format("<a href=\"{0}\">{0}</a>", url);
+	set_window_text(m_link, link_str);
 }
 
 void CDialogTagger::UpdateTracks()
