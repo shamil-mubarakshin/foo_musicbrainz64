@@ -31,7 +31,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 {
 	const size_t handle_count = m_handles.get_count();
 
-	json j = m_query->lookup(abort);
+	auto j = m_query->lookup(abort);
 	if (!j.is_object())
 	{
 		m_failed = true;
@@ -73,7 +73,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 				Query query("release", ids[i]);
 				query.add_param("inc", Query::s_inc_release);
 
-				json j2 = query.lookup(abort);
+				auto j2 = query.lookup(abort);
 				if (!j2.is_object())
 				{
 					m_failed = true;

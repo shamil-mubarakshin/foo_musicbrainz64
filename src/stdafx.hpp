@@ -13,7 +13,7 @@
 
 #define JSON_USE_IMPLICIT_CONVERSIONS 0
 #include <nlohmann/json.hpp>
-using json = nlohmann::json;
+using JSON = nlohmann::json;
 
 #include <helpers/foobar2000+atl.h>
 #include <helpers/atl-misc.h>

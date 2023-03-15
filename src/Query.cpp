@@ -8,7 +8,7 @@ Query::Query(std::string_view entity, std::string_view id)
 	url += "?fmt=json";
 }
 
-json Query::lookup(abort_callback& abort)
+JSON Query::lookup(abort_callback& abort)
 {
 	pfc::string8 buffer;
 	auto request = http_client::get()->create_request("GET");
@@ -19,7 +19,7 @@ json Query::lookup(abort_callback& abort)
 		// FB2K_console_formatter() << url;
 		auto response = request->run_ex(url.c_str(), abort);
 		response->read_string_raw(buffer, abort);
-		json j = json::parse(buffer.get_ptr(), nullptr, false);
+		auto j = JSON::parse(buffer.get_ptr(), nullptr, false);
 
 		if (j.is_object())
 		{
@@ -38,7 +38,7 @@ json Query::lookup(abort_callback& abort)
 	}
 
 	popup_message::g_show(buffer, Component::name.data());
-	return json();
+	return JSON();
 }
 
 void Query::add_param(std::string_view param, std::string_view value)

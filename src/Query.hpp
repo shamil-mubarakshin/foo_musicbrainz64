@@ -5,7 +5,7 @@ class Query
 public:
 	Query(std::string_view entity, std::string_view id = "");
 
-	json lookup(abort_callback& abort);
+	JSON lookup(abort_callback& abort);
 	void add_param(std::string_view param, std::string_view value);
 
 	static constexpr std::string_view s_inc_discid = "artists+labels+recordings+release-groups+artist-credits+isrcs";

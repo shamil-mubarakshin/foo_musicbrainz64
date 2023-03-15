@@ -29,7 +29,7 @@ static const std::vector<AsciiReplacement> ascii_replacements =
 	{ u8"―", "-" },
 };
 
-ReleaseParser::ReleaseParser(json obj, size_t handle_count, json discid) : m_obj(obj), m_handle_count(handle_count)
+ReleaseParser::ReleaseParser(JSON obj, size_t handle_count, JSON discid) : m_obj(obj), m_handle_count(handle_count)
 {
 	m_release.discid = to_str(discid);
 }
@@ -43,7 +43,7 @@ Release ReleaseParser::parse()
 	return m_release;
 }
 
-std::string ReleaseParser::to_str(json& obj)
+std::string ReleaseParser::to_str(JSON& obj)
 {
 	if (obj.is_null()) return "";
 	if (!obj.is_string()) return obj.dump();
@@ -59,7 +59,7 @@ std::string ReleaseParser::to_str(json& obj)
 	return str.get_ptr();
 }
 
-void ReleaseParser::filter_releases(json& releases, size_t count, Strings& out)
+void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 {
 	if (!releases.is_array()) return;
 
@@ -91,7 +91,7 @@ void ReleaseParser::filter_releases(json& releases, size_t count, Strings& out)
 	}
 }
 
-void ReleaseParser::parse_artist_credits(json& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids)
+void ReleaseParser::parse_artist_credits(JSON& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids)
 {
 	auto& artist_credits = obj["artist-credit"];
 	if (!artist_credits.is_array()) return;
@@ -139,7 +139,7 @@ void ReleaseParser::parse_label_and_barcode()
 	}
 }
 
-void ReleaseParser::parse_relations(json& obj, Strings& composers, Performers& performers)
+void ReleaseParser::parse_relations(JSON& obj, Strings& composers, Performers& performers)
 {
 	auto& relations = obj["relations"];
 	if (relations.is_array())
@@ -255,7 +255,7 @@ void ReleaseParser::parse_tracks()
 	auto& medias = m_obj["media"];
 	if (!medias.is_array()) return;
 
-	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [](size_t t, json j) { return t + j["tracks"].size(); });
+	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [](size_t t, JSON j) { return t + j["tracks"].size(); });
 	const bool complete = release_totaltracks == m_handle_count;
 	m_release.totaldiscs = medias.size();
 
