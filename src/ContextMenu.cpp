@@ -8,7 +8,7 @@
 struct ContextItem
 {
 	const GUID* guid;
-	const std::string name;
+	const std::string_view name;
 };
 
 static const std::vector<ContextItem> context_items =
@@ -41,7 +41,7 @@ public:
 		get_item_name(index, out);
 
 		// Always display search/albumid options
-		if (index == 1 || index == 2) return true; 
+		if (index == 1 || index == 2) return true;
 
 		// TOC options are conditional based on selection properties
 		if (handles.get_count() > 99) return false;

@@ -10,7 +10,7 @@ public:
 private:
 	std::vector<uint8_t> GetDigest();
 	uint32_t CircularShift(int bits, uint32_t word);
-	void Input(size_t num, std::string_view);
+	void Input(size_t num, std::string_view format);
 	void PadMessage();
 	void ProcessMessageBlock();
 

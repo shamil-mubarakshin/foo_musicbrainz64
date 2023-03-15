@@ -53,7 +53,7 @@ public:
 
 	uint32_t get_state() final
 	{
-		const auto has_changed = [&]()
+		const auto has_changed = [this]
 		{
 			for (const auto& [key, value] : m_check_map)
 			{

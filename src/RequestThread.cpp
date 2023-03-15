@@ -7,8 +7,7 @@
 RequestThread::RequestThread(Type type, std::unique_ptr<Query> q, metadb_handle_list_cref handles)
 	: m_type(type)
 	, m_query(std::move(q))
-	, m_handles(handles)
-	, m_failed(false) {}
+	, m_handles(handles) {}
 
 void RequestThread::on_done(HWND, bool was_aborted)
 {
@@ -63,7 +62,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 			ReleaseParser::filter_releases(releases, handle_count, ids);
 			const size_t count = ids.size();
 
-			for (size_t i = 0; i < count; ++i)
+			for (const size_t i : std::views::iota(0U, count))
 			{
 				abort.check();
 				status.set_progress(i + 1, count);
