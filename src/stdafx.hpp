@@ -25,8 +25,6 @@ using json = nlohmann::json;
 #include <libPPUI/Controls.h>
 #include <pfc/string-conv-lite.h>
 
-#include <wil/stl.h>
-
 #include "foo_musicbrainz64.hpp"
 #include "GUIDS.hpp"
 #include "Resource.hpp"

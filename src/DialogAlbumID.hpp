@@ -3,7 +3,7 @@
 class CDialogAlbumID : public CDialogImpl<CDialogAlbumID>
 {
 public:
-	CDialogAlbumID(wil::zstring_view albumid) : m_albumid(albumid)
+	CDialogAlbumID(std::string_view albumid) : m_albumid(albumid)
 	{
 		m_url = fmt::format("{}/release/", prefs::get_server());
 	}

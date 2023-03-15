@@ -3,7 +3,7 @@
 
 namespace prefs
 {
-	static constexpr wil::zstring_view default_server = "https://musicbrainz.org";
+	static constexpr std::string_view default_server = "https://musicbrainz.org";
 
 	namespace bools
 	{

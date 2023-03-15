@@ -3,24 +3,24 @@
 
 TagWriter::TagWriter(metadb_handle_list_cref handles, const Release& release, size_t offset) : m_handles(handles), m_release(release), m_offset(offset) {}
 
-pfc::string8 TagWriter::trim(wil::zstring_view str)
+pfc::string8 TagWriter::trim(std::string_view str)
 {
 	return pfc::string8(str).trim(' ');
 }
 
-void TagWriter::set(file_info& info, wil::zstring_view name, size_t value)
+void TagWriter::set(file_info& info, std::string_view name, size_t value)
 {
 	info.meta_set(name.data(), pfc::format_uint(value));
 }
 
-void TagWriter::set(file_info& info, wil::zstring_view name, wil::zstring_view value)
+void TagWriter::set(file_info& info, std::string_view name, std::string_view value)
 {
 	const pfc::string8 trimmed = trim(value);
 	if (trimmed.get_length()) info.meta_set(name.data(), trimmed);
 	else info.meta_remove_field(name.data());
 }
 
-void TagWriter::set_values(file_info& info, wil::zstring_view name, const Strings& values)
+void TagWriter::set_values(file_info& info, std::string_view name, const Strings& values)
 {
 	info.meta_remove_field(name.data());
 	if (values.empty()) return;

@@ -87,14 +87,14 @@ static bool is_uuid(const char* mbid)
 	return std::regex_search(mbid, rx);
 }
 
-static int get_primary_type_index(wil::zstring_view str)
+static int get_primary_type_index(std::string_view str)
 {
 	const auto it = std::ranges::find_if(primary_types, [str](auto&& elem) { return stricmp_utf8(elem.data(), str.data()) == 0; });
 	if (it == primary_types.end()) return 0;
 	return static_cast<int>(std::ranges::distance(primary_types.begin(), it));
 }
 
-static int get_status_index(wil::zstring_view str)
+static int get_status_index(std::string_view str)
 {
 	const auto it = std::ranges::find_if(release_statuses, [str](auto&& elem) { return stricmp_utf8(elem.data(), str.data()) == 0; });
 	if (it == release_statuses.end()) return 0;
@@ -111,7 +111,7 @@ static std::string get_status_str(size_t idx)
 	return release_statuses[idx].data();
 }
 
-static void set_window_text(HWND hwnd, wil::zstring_view str)
+static void set_window_text(HWND hwnd, std::string_view str)
 {
 	SetWindowTextW(hwnd, pfc::wideFromUTF8(str.data()));
 }

@@ -1,7 +1,7 @@
 #include "stdafx.hpp"
 #include "Query.hpp"
 
-Query::Query(wil::zstring_view entity, wil::zstring_view id)
+Query::Query(std::string_view entity, std::string_view id)
 {
 	url = fmt::format("{}/ws/2/{}", prefs::get_server(), entity);
 	if (id.length() > 0) url += fmt::format("/{}", id);
@@ -41,7 +41,7 @@ json Query::lookup(abort_callback& abort)
 	return json();
 }
 
-void Query::add_param(wil::zstring_view param, wil::zstring_view value)
+void Query::add_param(std::string_view param, std::string_view value)
 {
 	url += fmt::format("&{}={}", param, value);
 }

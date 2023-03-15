@@ -3,13 +3,13 @@
 class Query
 {
 public:
-	Query(wil::zstring_view entity, wil::zstring_view id = "");
+	Query(std::string_view entity, std::string_view id = "");
 
 	json lookup(abort_callback& abort);
-	void add_param(wil::zstring_view param, wil::zstring_view value);
+	void add_param(std::string_view param, std::string_view value);
 
-	static constexpr wil::zstring_view s_inc_discid = "artists+labels+recordings+release-groups+artist-credits+isrcs";
-	static constexpr wil::zstring_view s_inc_release = "recording-level-rels+artist-credits+release-rels+aliases+release-groups+recordings+artists+labels+recording-rels+artist-rels+work-level-rels+media+isrcs+discids+work-rels";
+	static constexpr std::string_view s_inc_discid = "artists+labels+recordings+release-groups+artist-credits+isrcs";
+	static constexpr std::string_view s_inc_release = "recording-level-rels+artist-credits+release-rels+aliases+release-groups+recordings+artists+labels+recording-rels+artist-rels+work-level-rels+media+isrcs+discids+work-rels";
 
 private:
 	std::string url;

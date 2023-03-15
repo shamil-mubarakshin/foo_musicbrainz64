@@ -3,7 +3,7 @@
 class CDialogArtistAlbum : public CDialogImpl<CDialogArtistAlbum>
 {
 public:
-	CDialogArtistAlbum(wil::zstring_view artist, wil::zstring_view album) : m_artist(artist), m_album(album) {}
+	CDialogArtistAlbum(std::string_view artist, std::string_view album) : m_artist(artist), m_album(album) {}
 
 	BEGIN_MSG_MAP_EX(CDialogArtistAlbum)
 		MSG_WM_INITDIALOG(OnInitDialog)
