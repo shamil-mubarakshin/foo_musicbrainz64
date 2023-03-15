@@ -9,7 +9,6 @@ public:
 	std::string get_url();
 
 private:
-	std::string rfc822_binary(std::vector<uint8_t>& src);
 	void calc_pregap(const file_info& info);
 
 	size_t m_count{};
