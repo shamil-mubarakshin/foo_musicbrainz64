@@ -3,7 +3,7 @@
 
 struct AsciiReplacement
 {
-	std::string what, with;
+	std::string_view what, with;
 };
 
 static const std::vector<AsciiReplacement> ascii_replacements =
@@ -53,7 +53,7 @@ std::string ReleaseParser::json_to_string(JSON& obj)
 	{
 		for (const auto& [what, with] : ascii_replacements)
 		{
-			str = str.replace(what.c_str(), with.c_str());
+			str = str.replace(what.data(), with.data());
 		}
 	}
 	return str.get_ptr();
