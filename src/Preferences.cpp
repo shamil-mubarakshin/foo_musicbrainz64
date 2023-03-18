@@ -8,16 +8,15 @@ namespace prefs
 	namespace bools
 	{
 		cfg_bool custom_server(guids::cfg_bool_server, false);
-
 		cfg_bool write_standard_tags(guids::cfg_bool_write_standard_tags, true);
-		cfg_bool short_date(guids::cfg_bool_short_date, true);
+		cfg_bool write_ids(guids::cfg_bool_write_ids, true);
 		cfg_bool ascii_punctuation(guids::cfg_bool_ascii_punctuation, true);
+		cfg_bool short_date(guids::cfg_bool_short_date, true);
 		cfg_bool write_original_date(guids::cfg_bool_write_original_date, true);
 		cfg_bool write_artists(guids::cfg_bool_write_artists, true);
 		cfg_bool write_artist_sort(guids::cfg_bool_write_artist_sort, true);
 		cfg_bool write_performer(guids::cfg_bool_write_performer, true);
 		cfg_bool write_composer(guids::cfg_bool_write_composer, true);
-		cfg_bool write_ids(guids::cfg_bool_write_ids, true);
 		cfg_bool write_releasetype(guids::cfg_bool_write_releasetype, true);
 		cfg_bool write_releasestatus(guids::cfg_bool_write_releasestatus, true);
 		cfg_bool write_releasecountry(guids::cfg_bool_write_releasecountry, true);
@@ -106,14 +105,14 @@ private:
 
 		m_check_map[IDC_CHECK_SERVER] = { &bools::custom_server };
 		m_check_map[IDC_CHECK_WRITE_STANDARD_TAGS] = { &bools::write_standard_tags };
-		m_check_map[IDC_CHECK_SHORT_DATE] = { &bools::short_date };
+		m_check_map[IDC_CHECK_WRITE_IDS] = { &bools::write_ids };
 		m_check_map[IDC_CHECK_ASCII_PUNCTUATION] = { &bools::ascii_punctuation };
+		m_check_map[IDC_CHECK_SHORT_DATE] = { &bools::short_date };
 		m_check_map[IDC_CHECK_WRITE_ORIGINAL_DATE] = { &bools::write_original_date };
 		m_check_map[IDC_CHECK_WRITE_ARTISTS] = { &bools::write_artists };
 		m_check_map[IDC_CHECK_WRITE_ARTIST_SORT] = { &bools::write_artist_sort, };
 		m_check_map[IDC_CHECK_WRITE_PERFORMER] = { &bools::write_performer };
 		m_check_map[IDC_CHECK_WRITE_COMPOSER] = { &bools::write_composer };
-		m_check_map[IDC_CHECK_WRITE_IDS] = { &bools::write_ids };
 		m_check_map[IDC_CHECK_WRITE_RELEASETYPE] = { &bools::write_releasetype };
 		m_check_map[IDC_CHECK_WRITE_RELEASESTATUS] = { &bools::write_releasestatus };
 		m_check_map[IDC_CHECK_WRITE_RELEASECOUNTRY] = { &bools::write_releasecountry };
