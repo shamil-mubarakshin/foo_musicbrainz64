@@ -1,11 +1,16 @@
 #include "stdafx.hpp"
 #include "Query.hpp"
 
-Query::Query(std::string_view entity, std::string_view id)
+Query::Query(std::string_view what, std::string_view id)
 {
-	url = fmt::format("{}/ws/2/{}", prefs::get_server(), entity);
-	if (id.length() > 0) url += fmt::format("/{}", id);
-	url += "?fmt=json";
+	if (id.length())
+	{
+		m_url = fmt::format("{}/ws/2/{}/{}?fmt=json", prefs::get_server(), what, id);
+	}
+	else
+	{
+		m_url = fmt::format("{}/ws/2/{}?fmt=json", prefs::get_server(), what);
+	}
 }
 
 JSON Query::lookup(abort_callback& abort)
@@ -16,8 +21,8 @@ JSON Query::lookup(abort_callback& abort)
 
 	try
 	{
-		// FB2K_console_formatter() << url;
-		auto response = request->run_ex(url.c_str(), abort);
+		// FB2K_console_formatter() << m_url;
+		auto response = request->run_ex(m_url.c_str(), abort);
 		response->read_string_raw(buffer, abort);
 		auto j = JSON::parse(buffer.get_ptr(), nullptr, false);
 
@@ -41,7 +46,7 @@ JSON Query::lookup(abort_callback& abort)
 	return JSON();
 }
 
-void Query::add_param(std::string_view param, std::string_view value)
+void Query::add_param(std::string_view name, std::string_view value)
 {
-	url += fmt::format("&{}={}", param, value);
+	m_url += fmt::format("&{}={}", name, value);
 }

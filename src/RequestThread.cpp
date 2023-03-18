@@ -4,9 +4,9 @@
 #include "Query.hpp"
 #include "ReleaseParser.hpp"
 
-RequestThread::RequestThread(Type type, std::unique_ptr<Query> q, metadb_handle_list_cref handles)
+RequestThread::RequestThread(Type type, std::unique_ptr<Query> query, metadb_handle_list_cref handles)
 	: m_type(type)
-	, m_query(std::move(q))
+	, m_query(std::move(query))
 	, m_handles(handles) {}
 
 void RequestThread::on_done(HWND, bool was_aborted)
@@ -69,7 +69,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 				status.set_title(fmt::format("Fetching {} of {}", i + 1, count).c_str());
 				Sleep(800);
 
-				Query query("release", ids[i]);
+				auto query = Query("release", ids[i]);
 				query.add_param("inc", Query::s_inc_release);
 
 				auto j2 = query.lookup(abort);

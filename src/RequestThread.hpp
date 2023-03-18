@@ -12,7 +12,7 @@ public:
 		AlbumID
 	};
 
-	RequestThread(Type type, std::unique_ptr<Query> q, metadb_handle_list_cref handles);
+	RequestThread(Type type, std::unique_ptr<Query> query, metadb_handle_list_cref handles);
 
 	void on_done(HWND hwnd, bool was_aborted) final;
 	void run(threaded_process_status& status, abort_callback& abort) final;
