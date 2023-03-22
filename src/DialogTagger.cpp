@@ -77,7 +77,8 @@ BOOL CDialogTagger::OnInitDialog(CWindow, LPARAM)
 
 LRESULT CDialogTagger::OnLink(LPNMHDR pnmh)
 {
-	ShellExecuteW(nullptr, L"open", ((PNMLINK)pnmh)->item.szUrl, nullptr, nullptr, SW_SHOW);
+	const auto link = reinterpret_cast<PNMLINK>(pnmh);
+	ShellExecuteW(nullptr, L"open", link->item.szUrl, nullptr, nullptr, SW_SHOW);
 	return 0;
 }
 
