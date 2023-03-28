@@ -46,8 +46,6 @@ CDialogTagger::CDialogTagger(const Releases& releases, metadb_handle_list_cref h
 	, m_resizer(resize_data, resize_min_max)
 	, m_list_track(this)
 	, m_dpi(QueryScreenDPIEx(*this).cx)
-	, m_current_release(0)
-	, m_current_disc(0)
 	, m_handle_count(handles.get_count())
 	, m_release_count(releases.size())
 {
