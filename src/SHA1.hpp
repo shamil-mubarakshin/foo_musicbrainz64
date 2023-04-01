@@ -3,12 +3,14 @@
 class SHA1Context
 {
 public:
+	using Digest = std::vector<uint8_t>;
+
 	SHA1Context(size_t count, const std::vector<uint32_t>& tracks);
 
 	std::string RFC822_Binary();
 
 private:
-	std::vector<uint8_t> GetDigest();
+	Digest GetDigest();
 	uint32_t CircularShift(int bits, uint32_t word);
 	void Input(size_t num, std::string_view format);
 	void PadMessage();

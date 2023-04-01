@@ -14,6 +14,17 @@ SHA1Context::SHA1Context(size_t count, const std::vector<uint32_t>& tracks)
 	}
 }
 
+SHA1Context::Digest SHA1Context::GetDigest()
+{
+	PadMessage();
+	Message_Block.fill(0);
+	Length_Low = 0;
+	Length_High = 0;
+
+	auto view = std::views::iota(0U, 20U) | std::views::transform([this](auto&& index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); });
+	return std::ranges::to<Digest>(view);
+}
+
 std::string SHA1Context::RFC822_Binary()
 {
 	static constexpr std::string_view v = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
@@ -33,17 +44,6 @@ std::string SHA1Context::RFC822_Binary()
 		d += 3;
 	}
 	return ret;
-}
-
-std::vector<uint8_t> SHA1Context::GetDigest()
-{
-	PadMessage();
-	Message_Block.fill(0);
-	Length_Low = 0;
-	Length_High = 0;
-
-	auto view = std::views::iota(0U, 20U) | std::views::transform([this](auto&& index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); });
-	return std::ranges::to<std::vector<uint8_t>>(view);
 }
 
 uint32_t SHA1Context::CircularShift(int bits, uint32_t word)

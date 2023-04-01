@@ -43,7 +43,8 @@ void TagWriter::write()
 	std::string subtitle;
 	std::vector<file_info_impl> infos;
 
-	for (auto&& [handle, track] : std::views::zip(m_handles, m_release.tracks))
+	// TODO: replace with std::views::zip when intellisense is fixed
+	for (auto&& [handle, track] : std::ranges::zip_view(m_handles, m_release.tracks))
 	{
 		file_info_impl info = handle->get_info_ref()->info();
 
@@ -93,12 +94,14 @@ void TagWriter::write()
 
 		if (prefs::bools::write_releasetype)
 		{
-			Strings types = split_string(m_release.secondary_types, ";");
+			Strings types;
 			if (get_primary_type_index(m_release.primary_type) > 0)
 			{
-				types.insert(types.begin(), m_release.primary_type);
+				types.emplace_back(m_release.primary_type);
 			}
 
+			const Strings secondary = split_string(m_release.secondary_types, ";");
+			std::ranges::copy(secondary, std::back_inserter(types));
 			set_values(info, "RELEASETYPE", types);
 		}
 
@@ -119,7 +122,11 @@ void TagWriter::write()
 
 		if (prefs::bools::write_ids)
 		{
-			if (m_release.is_various) set_values(info, "MUSICBRAINZ_ALBUMARTISTID", m_release.albumartistids);
+			if (m_release.is_various)
+			{
+				set_values(info, "MUSICBRAINZ_ALBUMARTISTID", m_release.albumartistids);
+			}
+
 			set_values(info, "MUSICBRAINZ_ARTISTID", track.artistids);
 			set(info, "MUSICBRAINZ_DISCID", m_release.discid);
 			set(info, "MUSICBRAINZ_ALBUMID", m_release.albumid);

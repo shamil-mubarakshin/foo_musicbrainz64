@@ -80,16 +80,15 @@ void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 		else
 		{
 			auto& medias = release["media"];
-			if (medias.is_array())
+			if (!medias.is_array()) return;
+			
+			for (auto&& media : medias)
 			{
-				for (auto&& media : medias)
+				auto& media_track_count = media["track-count"];
+				if (media_track_count.is_number_unsigned() && media_track_count.get<size_t>() == count)
 				{
-					auto& media_track_count = media["track-count"];
-					if (media_track_count.is_number_unsigned() && media_track_count.get<size_t>() == count)
-					{
-						out.emplace_back(id);
-						break;
-					}
+					out.emplace_back(id);
+					break;
 				}
 			}
 		}
