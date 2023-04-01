@@ -5,7 +5,7 @@ class CDialogAlbumID : public CDialogImpl<CDialogAlbumID>
 public:
 	CDialogAlbumID(std::string_view albumid) : m_albumid(albumid)
 	{
-		m_url = fmt::format("{}/release/", prefs::get_server());
+		m_base_url = fmt::format("{}/release/", prefs::get_server());
 	}
 
 	BEGIN_MSG_MAP_EX(CDialogAlbumID)
@@ -41,9 +41,9 @@ private:
 	{
 		const std::string str = pfc::getWindowText(m_edit_albumid).get_ptr();
 
-		if (str.starts_with(m_url))
+		if (str.starts_with(m_base_url))
 		{
-			set_window_text(m_edit_albumid, str.substr(m_url.length()));
+			set_window_text(m_edit_albumid, str.substr(m_base_url.length()));
 			return;
 		}
 
@@ -53,5 +53,5 @@ private:
 	CButton m_btn_ok;
 	CEdit m_edit_albumid;
 	fb2k::CCoreDarkModeHooks m_hooks;
-	std::string m_url;
+	std::string m_base_url;
 };
