@@ -21,7 +21,7 @@ SHA1Context::Digest SHA1Context::GetDigest()
 	Length_Low = 0;
 	Length_High = 0;
 
-	auto view = std::views::iota(0U, 20U) | std::views::transform([this](auto&& index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); });
+	auto view = std::views::iota(0U, 20U) | std::views::transform([this](const uint32_t index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); });
 	return std::ranges::to<Digest>(view);
 }
 
