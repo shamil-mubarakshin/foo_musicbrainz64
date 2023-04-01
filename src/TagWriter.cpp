@@ -95,7 +95,7 @@ void TagWriter::write()
 		if (prefs::bools::write_releasetype)
 		{
 			Strings types;
-			if (get_primary_type_index(m_release.primary_type) > 0)
+			if (get_index(primary_types, m_release.primary_type) > 0)
 			{
 				types.emplace_back(m_release.primary_type);
 			}
@@ -105,7 +105,7 @@ void TagWriter::write()
 			set_values(info, "RELEASETYPE", types);
 		}
 
-		if (prefs::bools::write_releasestatus && get_status_index(m_release.status) > 0)
+		if (prefs::bools::write_releasestatus && get_index(release_statuses, m_release.status) > 0)
 		{
 			set(info, "RELEASESTATUS", m_release.status);
 		}

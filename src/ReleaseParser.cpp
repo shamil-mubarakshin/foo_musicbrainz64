@@ -61,7 +61,8 @@ std::string ReleaseParser::json_to_string(JSON& obj)
 
 std::string ReleaseParser::set_to_string(const StringSet& set)
 {
-	return fmt::format("{}", fmt::join(set | std::views::filter([](auto&& str) { return str.length() > 0; }), s_sep));
+	auto filter = [](auto&& str) { return str.length() > 0; };
+	return fmt::format("{}", fmt::join(set | std::views::filter(filter), s_sep));
 }
 
 void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)

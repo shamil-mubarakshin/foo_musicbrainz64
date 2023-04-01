@@ -309,12 +309,14 @@ void CDialogTagger::OnSecondaryTypesUpdate(uint32_t, int, CWindow)
 
 void CDialogTagger::OnStatusChange(uint32_t, int, CWindow)
 {
-	m_releases[m_current_release].status = get_status_str(m_combo_status.GetCurSel());
+	const size_t idx = m_combo_status.GetCurSel();
+	m_releases[m_current_release].status = release_statuses[idx].data();
 }
 
 void CDialogTagger::OnTypeChange(uint32_t, int, CWindow)
 {
-	m_releases[m_current_release].primary_type = get_primary_type_str(m_combo_primary_type.GetCurSel());
+	const size_t idx = m_combo_primary_type.GetCurSel();
+	m_releases[m_current_release].primary_type = primary_types[idx].data();
 }
 
 void CDialogTagger::UpdateRelease()
@@ -331,8 +333,8 @@ void CDialogTagger::UpdateRelease()
 	set_window_text(m_edit_barcode, release.barcode);
 	set_window_text(m_edit_secondary_types, release.secondary_types);
 
-	m_combo_primary_type.SetCurSel(get_primary_type_index(release.primary_type));
-	m_combo_status.SetCurSel(get_status_index(release.status));
+	m_combo_primary_type.SetCurSel(get_index(primary_types, release.primary_type));
+	m_combo_status.SetCurSel(get_index(release_statuses, release.status));
 
 	m_combo_disc.ResetContent();
 
