@@ -14,15 +14,16 @@ SHA1Context::SHA1Context(size_t count, const std::vector<uint32_t>& tracks)
 	}
 }
 
-SHA1Context::Digest SHA1Context::GetDigest()
+SHA1Context::Result SHA1Context::GetResult()
 {
 	PadMessage();
 	Message_Block.fill(0);
 	Length_Low = 0;
 	Length_High = 0;
 
-	auto view = std::views::iota(0U, 20U) | std::views::transform([this](const uint32_t index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); });
-	return std::ranges::to<Digest>(view);
+	auto transform = [this](const uint32_t index) { return Intermediate_Hash[index >> 2] >> 8 * (3 - (index & 0x03)); };
+	auto view = std::views::iota(0U, 20U) | std::views::transform(transform);
+	return std::ranges::to<Result>(view);
 }
 
 std::string SHA1Context::RFC822_Binary()
@@ -30,9 +31,9 @@ std::string SHA1Context::RFC822_Binary()
 	static constexpr std::string_view v = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
 	std::string ret;
 
-	auto digest = GetDigest();
-	uint8_t* d = digest.data();
-	size_t s = digest.size();
+	auto result = GetResult();
+	uint8_t* d = result.data();
+	size_t s = result.size();
 
 	while (s)
 	{
