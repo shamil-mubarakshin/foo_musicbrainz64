@@ -42,15 +42,15 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 	case Type::DiscID:
 		{
 			auto& releases = j["releases"];
-			if (releases.is_array())
+			if (!releases.is_array() || !j["id"].is_string()) return;
+			const std::string discid = j["id"].get<std::string>();
+
+			for (auto&& release : releases)
 			{
-				for (auto&& release : releases)
+				auto r = ReleaseParser(release, handle_count, discid).parse();
+				if (r.tracks.size())
 				{
-					Release r = ReleaseParser(release, handle_count, j["id"]).parse();
-					if (r.tracks.size())
-					{
-						m_releases.emplace_back(r);
-					}
+					m_releases.emplace_back(r);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 					return;
 				}
 
-				Release r = ReleaseParser(j2, handle_count).parse();
+				auto r = ReleaseParser(j2, handle_count).parse();
 				if (r.tracks.size())
 				{
 					m_releases.emplace_back(r);
@@ -89,7 +89,7 @@ void RequestThread::run(threaded_process_status& status, abort_callback& abort)
 		break;
 	case Type::AlbumID:
 		{
-			Release r = ReleaseParser(j, handle_count).parse();
+			auto r = ReleaseParser(j, handle_count).parse();
 			if (r.tracks.size())
 			{
 				m_releases.emplace_back(r);

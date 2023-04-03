@@ -29,9 +29,9 @@ static const std::vector<AsciiReplacement> ascii_replacements =
 	{ u8"―", "-" },
 };
 
-ReleaseParser::ReleaseParser(JSON json, size_t handle_count, JSON discid) : m_json(json), m_handle_count(handle_count)
+ReleaseParser::ReleaseParser(JSON json, size_t handle_count, std::string_view discid) : m_json(json), m_handle_count(handle_count)
 {
-	m_release.discid = json_to_string(discid);
+	m_release.discid = discid;
 }
 
 Release ReleaseParser::parse()

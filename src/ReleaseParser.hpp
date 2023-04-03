@@ -3,7 +3,7 @@
 class ReleaseParser
 {
 public:
-	ReleaseParser(JSON json, size_t handle_count, JSON discid = JSON());
+	ReleaseParser(JSON json, size_t handle_count, std::string_view discid = "");
 
 	static void filter_releases(JSON& releases, size_t count, Strings& out);
 
