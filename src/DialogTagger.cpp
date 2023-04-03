@@ -98,7 +98,7 @@ pfc::string8 CDialogTagger::listGetSubItemText(ctx_t, size_t row, size_t column)
 	case 1:
 		return fmt::format("{}.{}", track.discnumber, track.tracknumber);
 	case 2:
-		if (track.tracknumber == 1 && release.totaldiscs > 1)
+		if (track.tracknumber == 1)
 		{
 			return track.subtitle;
 		}
@@ -416,7 +416,7 @@ void CDialogTagger::listSubItemClicked(ctx_t, size_t row, size_t column)
 	auto& release = m_releases[m_current_release];
 	auto& track = release.tracks[track_idx];
 
-	const bool subtitle_edit = prefs::bools::write_standard_tags && column == 2 && release.totaldiscs > 1 && track.tracknumber == 1;
+	const bool subtitle_edit = prefs::bools::write_standard_tags && column == 2 && track.tracknumber == 1;
 	const bool standard_edit = prefs::bools::write_standard_tags && column > 2;
 	if (subtitle_edit || standard_edit)
 	{
