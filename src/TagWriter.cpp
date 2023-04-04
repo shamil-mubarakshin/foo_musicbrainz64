@@ -16,11 +16,11 @@ void TagWriter::set(file_info& info, std::string_view name, size_t value)
 void TagWriter::set(file_info& info, std::string_view name, std::string_view value)
 {
 	info.meta_remove_field(name.data());
-	if (stricmp_utf8(name.data(), "ARTISTSORT") == 0)
+	if (name == "ARTISTSORT")
 	{
 		info.meta_remove_field("ARTISTSORTORDER");
 	}
-	else if (stricmp_utf8(name.data(), "ALBUMARTISTSORT") == 0)
+	else if (name == "ALBUMARTISTSORT")
 	{
 		info.meta_remove_field("ALBUMARTISTSORTORDER");
 	}
