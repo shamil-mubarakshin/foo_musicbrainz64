@@ -15,14 +15,21 @@ void TagWriter::set(file_info& info, std::string_view name, size_t value)
 
 void TagWriter::set(file_info& info, std::string_view name, std::string_view value)
 {
-	const pfc::string8 trimmed = trim(value);
-	if (trimmed.is_empty())
+	info.meta_remove_field(name.data());
+	if (stricmp_utf8(name.data(), "ARTISTSORT") == 0)
 	{
-		info.meta_remove_field(name.data());
-		return;
+		info.meta_remove_field("ARTISTSORTORDER");
+	}
+	else if (stricmp_utf8(name.data(), "ALBUMARTISTSORT") == 0)
+	{
+		info.meta_remove_field("ALBUMARTISTSORTORDER");
 	}
 
-	info.meta_set(name.data(), trimmed);
+	const pfc::string8 trimmed = trim(value);
+	if (trimmed.get_length())
+	{
+		info.meta_set(name.data(), trimmed);
+	}
 }
 
 void TagWriter::set_values(file_info& info, std::string_view name, const Strings& values)
