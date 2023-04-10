@@ -12,7 +12,7 @@ public:
 private:
 	static std::string json_to_string(JSON& obj);
 	static std::string set_to_string(const StringSet& set);
-	
+
 	void parse_artist_credits(JSON& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids);
 	void parse_label_and_barcode();
 	void parse_relations(JSON& obj, Strings& composers, Performers& performers);

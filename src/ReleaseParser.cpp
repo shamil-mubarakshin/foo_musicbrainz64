@@ -82,7 +82,7 @@ void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 		{
 			auto& medias = release["media"];
 			if (!medias.is_array()) return;
-			
+
 			for (auto&& media : medias)
 			{
 				auto& media_track_count = media["track-count"];
