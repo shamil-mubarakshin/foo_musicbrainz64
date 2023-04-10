@@ -10,6 +10,7 @@ public:
 	Release parse();
 
 private:
+	static bool check_array(JSON& arr);
 	static std::string json_to_string(JSON& obj);
 	static std::string set_to_string(const StringSet& set);
 

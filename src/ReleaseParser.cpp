@@ -43,6 +43,11 @@ Release ReleaseParser::parse()
 	return m_release;
 }
 
+bool ReleaseParser::check_array(JSON& arr)
+{
+	return arr.is_array() && arr.size() > 0;
+}
+
 std::string ReleaseParser::json_to_string(JSON& obj)
 {
 	if (obj.is_null()) return "";
@@ -67,7 +72,7 @@ std::string ReleaseParser::set_to_string(const StringSet& set)
 
 void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 {
-	if (!releases.is_array()) return;
+	if (!check_array(releases)) return;
 
 	for (auto&& release : releases)
 	{
@@ -81,7 +86,7 @@ void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 		else
 		{
 			auto& medias = release["media"];
-			if (!medias.is_array()) return;
+			if (!check_array(medias)) continue;
 
 			for (auto&& media : medias)
 			{
@@ -99,7 +104,7 @@ void ReleaseParser::filter_releases(JSON& releases, size_t count, Strings& out)
 void ReleaseParser::parse_artist_credits(JSON& obj, std::string& artist, std::string& artist_sort, Strings& artists, Strings& ids)
 {
 	auto& artist_credits = obj["artist-credit"];
-	if (!artist_credits.is_array()) return;
+	if (!check_array(artist_credits)) return;
 
 	for (auto&& artist_credit : artist_credits)
 	{
@@ -124,7 +129,7 @@ void ReleaseParser::parse_label_and_barcode()
 	m_release.barcode = json_to_string(m_json["barcode"]);
 
 	auto& label_infos = m_json["label-info"];
-	if (label_infos.is_array() && label_infos.size() > 0)
+	if (check_array(label_infos))
 	{
 		StringSet labels, catalogs;
 
@@ -147,7 +152,7 @@ void ReleaseParser::parse_label_and_barcode()
 void ReleaseParser::parse_relations(JSON& obj, Strings& composers, Performers& performers)
 {
 	auto& relations = obj["relations"];
-	if (relations.is_array())
+	if (check_array(relations))
 	{
 		for (auto&& relation : relations)
 		{
@@ -164,7 +169,7 @@ void ReleaseParser::parse_relations(JSON& obj, Strings& composers, Performers& p
 				else if (type == "instrument" || type == "vocal")
 				{
 					auto& attributes = relation["attributes"];
-					if (attributes.is_array() && attributes.size() > 0)
+					if (check_array(attributes))
 					{
 						auto view = attributes | std::views::transform([](auto&& attribute) { return json_to_string(attribute); });
 
@@ -198,7 +203,7 @@ void ReleaseParser::parse_release_info()
 	if (m_release.country != "GB")
 	{
 		auto& release_events = m_json["release-events"];
-		if (release_events.is_array())
+		if (check_array(release_events))
 		{
 			for (auto&& release_event : release_events)
 			{
@@ -206,7 +211,7 @@ void ReleaseParser::parse_release_info()
 				if (area.is_object())
 				{
 					auto& codes = area["iso-3166-1-codes"];
-					if (codes.is_array())
+					if (check_array(codes))
 					{
 						const auto it = std::ranges::find_if(codes, [](auto&& code) { return json_to_string(code) == "GB"; });
 						if (it != codes.end())
@@ -234,7 +239,7 @@ void ReleaseParser::parse_rg_and_date()
 		m_release.primary_type = json_to_string(rg["primary-type"]);
 
 		auto& secondary_types = rg["secondary-types"];
-		if (secondary_types.is_array())
+		if (check_array(secondary_types))
 		{
 			auto view = secondary_types | std::views::transform([](auto&& secondary_type) { return json_to_string(secondary_type); });
 			m_release.secondary_types = fmt::format("{}", fmt::join(view, s_sep));
@@ -258,7 +263,7 @@ void ReleaseParser::parse_rg_and_date()
 void ReleaseParser::parse_tracks()
 {
 	auto& medias = m_json["media"];
-	if (!medias.is_array()) return;
+	if (!check_array(medias)) return;
 
 	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [](size_t t, JSON j) { return t + j["tracks"].size(); });
 	const bool complete = release_totaltracks == m_handle_count;
@@ -267,12 +272,12 @@ void ReleaseParser::parse_tracks()
 	for (auto&& media : medias)
 	{
 		auto& tracks = media["tracks"];
-		if (tracks.is_array() && (complete || tracks.size() == m_handle_count))
+		if (check_array(tracks) && (complete || tracks.size() == m_handle_count))
 		{
 			if (m_release.discid.length())
 			{
 				auto& discs = media["discs"];
-				if (!discs.is_array()) continue;
+				if (!check_array(discs)) continue;
 				const auto it = std::ranges::find_if(discs, [=](auto&& disc) { return m_release.discid == json_to_string(disc["id"]); });
 				if (it == discs.end()) continue;
 			}
@@ -306,7 +311,7 @@ void ReleaseParser::parse_tracks()
 					t.trackid = json_to_string(recording["id"]);
 
 					auto& isrcs = recording["isrcs"];
-					if (isrcs.is_array())
+					if (check_array(isrcs))
 					{
 						auto view = isrcs | std::views::transform([](auto&& isrc) { return json_to_string(isrc); });
 						t.isrcs = std::ranges::to<Strings>(view);
