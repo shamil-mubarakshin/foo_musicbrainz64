@@ -89,7 +89,7 @@ static bool is_uuid(const char* mbid)
 
 static int get_index(std::ranges::sized_range auto& arr, std::string_view str)
 {
-	const auto it = std::ranges::find_if(arr, [str](auto&& elem) { return stricmp_utf8(elem.data(), str.data()) == 0; });
+	const auto it = std::ranges::find_if(arr, [str](auto&& elem) { return stricmp_utf8_ex(elem.data(), elem.length(), str.data(), str.length()) == 0; });
 	if (it == arr.end()) return 0;
 	return static_cast<int>(std::ranges::distance(arr.begin(), it));
 }

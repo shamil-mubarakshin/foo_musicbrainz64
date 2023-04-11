@@ -21,7 +21,7 @@ void RequestThread::on_done(HWND, bool was_aborted)
 
 	std::ranges::sort(m_releases, [](const Release& one, const Release& two) -> bool
 		{
-			return stricmp_utf8(one.date.data(), two.date.data()) < 0;
+			return stricmp_utf8(one.date.c_str(), two.date.c_str()) < 0;
 		});
 	fb2k::newDialog<CDialogTagger>(m_releases, m_handles);
 }
