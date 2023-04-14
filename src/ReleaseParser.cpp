@@ -265,7 +265,7 @@ void ReleaseParser::parse_tracks()
 	auto& medias = m_json["media"];
 	if (!check_array(medias)) return;
 
-	const size_t release_totaltracks = std::accumulate(medias.begin(), medias.end(), size_t{ 0 }, [](size_t t, JSON j) { return t + j["tracks"].size(); });
+	const size_t release_totaltracks = std::ranges::fold_left(medias, size_t{ 0 }, [](size_t t, JSON j) { return t + j["tracks"].size(); });
 	const bool complete = release_totaltracks == m_handle_count;
 	m_release.totaldiscs = medias.size();
 
