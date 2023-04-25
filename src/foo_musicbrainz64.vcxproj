@@ -154,6 +154,7 @@
   <Target Name="some" BeforeTargets="Build">
    <Message Text="PlatformToolset=$(PlatformToolset)" Importance="High" />
    <Message Text="DefaultPlatformToolset=$(DefaultPlatformToolset)" Importance="High" />
+   <Message Text="vctoolsversion=$(vctoolsversion)" Importance="High" />
   </Target>
 
   
