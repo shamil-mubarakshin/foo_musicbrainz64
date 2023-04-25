@@ -37,7 +37,7 @@ jobs:
 
     - name: Build x64
       run: |
-        msbuild src\${{ matrix.project }}.sln -m -p:Platform=x64 -p:Configuration=Release
+        msbuild /bl src\${{ matrix.project }}.sln -m -p:Platform=x64 -p:Configuration=Release -t:Rebuild
         copy src\x64\Release\${{ matrix.project }}.dll component
         copy src\x64\Release\${{ matrix.project }}.pdb component
 
@@ -62,3 +62,11 @@ jobs:
         files: component/${{ matrix.project }}-${{ github.ref_name }}.fb2k-component
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: upload msbuild.binlog
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: msbuild.binlog
+        path: msbuild.binlog
+        
