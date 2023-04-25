@@ -37,7 +37,7 @@ jobs:
 
     - name: run some debug
       run: |
-        msbuild /bl src\${{ matrix.project }}.sln -m -p:Platform=x64 -p:Configuration=Release -t:some
+        msbuild src\foo_musicbrainz64.vcxproj -m -p:Platform=x64 -p:Configuration=Release -t:some
 
     - name: Build x64
       run: |
