@@ -26,6 +26,9 @@ jobs:
       run: |
         get-childitem -Path 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC'
         get-content 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\Microsoft.VCToolsVersion.v143.default.props'
+        write-host "---"
+        get-content 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.props'
+        get-childitem 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\'
 
     - name: Set up vcpkg
       run: |
